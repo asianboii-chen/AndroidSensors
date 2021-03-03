@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using TizenSensor.lib;
@@ -18,16 +19,16 @@ namespace TizenSensor
 		{
 			InitializeComponent();
 
-			Sensor.Create(OnSensorCreate, OnSensorUpdate, 1000);
+			Sensor.Create(OnSensorCreated, OnSensorUpdated, 1000);
 
-			addrEntry.Completed += AddrEntry_Completed;
+			addrEntry.Completed += OnAddrEntryCompleted;
 		}
 
 		protected Sensor sensor;
 
 		protected Client client;
 
-		protected void OnSensorCreate(Sensor sensor)
+		protected void OnSensorCreated(Sensor sensor)
 		{
 			if (sensor is null)
 			{
@@ -39,32 +40,36 @@ namespace TizenSensor
 			addrEntry.IsEnabled = true;
 		}
 
-		private void AddrEntry_Completed(object sender, EventArgs e)
+		protected void OnAddrEntryCompleted(object sender, EventArgs e)
 		{
 			addrEntry.IsEnabled = false;
 			messageLabel.Text = "Connecting...";
-			Client.Connect(addrEntry.Text.Trim(), OnClientConnect);
+			Client.Connect(addrEntry.Text.Trim(), OnClientConnected);
 		}
 
-		protected void OnClientConnect(Client client)
+		protected void OnClientConnected(Client client)
 		{
 			if (client is null)
 			{
-				messageLabel.Text = "Connection failed!";
-				addrEntry.IsEnabled = true;
+				Device.BeginInvokeOnMainThread(() =>
+				{
+					messageLabel.Text = "Connection failed!";
+					addrEntry.IsEnabled = true;
+				});
 				return;
 			}
 
 			this.client = client;
-			addrEntry.IsVisible = false;
+			Device.BeginInvokeOnMainThread(() => addrEntry.IsVisible = false);
 			sensor.Start();
 		}
 
-		protected void OnSensorUpdate(int timestamp, int heartRate, float accelX, float accelY, float accelZ)
+		protected void OnSensorUpdated(int timestamp, int heartRate, float accelX, float accelY, float accelZ)
 		{
-			string dataText = $"{timestamp}, {heartRate}, {accelX:0.0}, {accelY:0.0}, {accelZ:0.0}";
-			messageLabel.Text = dataText;
-			client.Send(dataText + '\n');
+			Device.BeginInvokeOnMainThread(
+				() => messageLabel.Text = $"{timestamp}, {heartRate}, {accelX:0.0}, {accelY:0.0}, {accelZ:0.0}"
+			);
+			client.Send($"{timestamp} {heartRate} {accelX} {accelY} {accelZ}\n");
 		}
 	}
 }

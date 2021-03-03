@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>tizen40</TargetFramework>
+    <TargetFramework>tizen60</TargetFramework>
     <AssemblyName>TizenSensor</AssemblyName>
   </PropertyGroup>
 
@@ -18,7 +18,7 @@
     </PropertyGroup>
     
     <ItemGroup Condition="'$(Configuration)' != 'Release'">
-        <PackageReference Include="TizenHotReloader_4" Version="1.0.0" />
+        <PackageReference Include="TizenHotReloader" Version="1.0.0" />
     </ItemGroup>
     
 
