@@ -51,10 +51,12 @@ namespace TizenSensor.lib
 
 			heartRateMonitor = new HeartRateMonitor
 			{
+				Interval = reportInterval,
 				PausePolicy = SensorPausePolicy.None
 			};
 			accelerometer = new Accelerometer
 			{
+				Interval = reportInterval,
 				PausePolicy = SensorPausePolicy.None
 			};
 			timer = new Timer
@@ -92,13 +94,20 @@ namespace TizenSensor.lib
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			timestamp++;
-			OnUpdate?.Invoke(
-				timestamp,
-				heartRateMonitor.HeartRate,
-				accelerometer.X,
-				accelerometer.Y,
-				accelerometer.Z
-			);
+			try
+			{
+				OnUpdate?.Invoke(
+					timestamp,
+					heartRateMonitor.HeartRate,
+					accelerometer.X,
+					accelerometer.Y,
+					accelerometer.Z
+				);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Sensor: error occurred on update (t={timestamp}): {ex.Message}");
+			}
 		}
 	}
 }

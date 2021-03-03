@@ -20,7 +20,7 @@ namespace TizenSensor.lib
 					if (state.ErrorOccured) onConnect(null);
 					else onConnect(new Client(state.TheSocket));
 				},
-				"192.168.0.56",
+				serverAddr,
 				6912
 			);
 		}

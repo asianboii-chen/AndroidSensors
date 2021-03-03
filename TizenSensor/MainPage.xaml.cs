@@ -19,6 +19,8 @@ namespace TizenSensor
 			InitializeComponent();
 
 			Sensor.Create(OnSensorCreate, OnSensorUpdate, 1000);
+
+			addrEntry.Completed += AddrEntry_Completed;
 		}
 
 		protected Sensor sensor;
@@ -29,33 +31,40 @@ namespace TizenSensor
 		{
 			if (sensor is null)
 			{
-				Console.WriteLine("Sensor: could not get necessary permissions");
-				Application.Current.Quit();
+				messageLabel.Text = "Permission failed!";
 				return;
 			}
 
 			this.sensor = sensor;
-			Client.Connect("192.168.0.56", OnClientConnect);
+			addrEntry.IsEnabled = true;
+		}
+
+		private void AddrEntry_Completed(object sender, EventArgs e)
+		{
+			addrEntry.IsEnabled = false;
+			messageLabel.Text = "Connecting...";
+			Client.Connect(addrEntry.Text.Trim(), OnClientConnect);
 		}
 
 		protected void OnClientConnect(Client client)
 		{
 			if (client is null)
 			{
-				Console.WriteLine("Sensor: could not connect to the server");
-				Application.Current.Quit();
+				messageLabel.Text = "Connection failed!";
+				addrEntry.IsEnabled = true;
 				return;
 			}
 
 			this.client = client;
+			addrEntry.IsVisible = false;
 			sensor.Start();
 		}
 
 		protected void OnSensorUpdate(int timestamp, int heartRate, float accelX, float accelY, float accelZ)
 		{
 			string dataText = $"{timestamp}, {heartRate}, {accelX:0.0}, {accelY:0.0}, {accelZ:0.0}";
-			dataLabel.Text = dataText;
-			if (!client.Send(dataText + '\n')) Console.WriteLine("Sensor: could not send data");
+			messageLabel.Text = dataText;
+			client.Send(dataText + '\n');
 		}
 	}
 }

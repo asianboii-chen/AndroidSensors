@@ -4,8 +4,9 @@
              x:Class="TizenSensor.MainPage">
 	<ContentPage.Content>
 		<StackLayout>
-			<Label Text="WearableML" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
-			<Label x:Name="dataLabel" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+			<Label x:Name="titleLabel" Text="WearableML" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+			<Entry x:Name="addrEntry" Text="192.168.0." IsEnabled="False" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+			<Label x:Name="messageLabel" Text="" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>
