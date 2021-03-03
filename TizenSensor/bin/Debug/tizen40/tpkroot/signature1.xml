@@ -8,7 +8,7 @@
     </Reference>
     <Reference URI="tizen-manifest.xml">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>yPD4DQnNup6eF8hRyUhqc1FZKQil0RZOPUGtPxvdlyoj0Plic2mXH9xFIdAHtyD3S4Wpnz1lWrDTnlrxI/e0lg==</DigestValue>
+      <DigestValue>OBHmw34rJa9QfNE3SUBnf6oQx/HqC2TaU1+U1sU6F1DNkcN9viVOvxd6R5nLlCvL1U0gVnoqqiXtbnrpqH9nKQ==</DigestValue>
     </Reference>
     <Reference URI="shared%2Fres%2FTizenSensor.png">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
@@ -18,13 +18,21 @@
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
       <DigestValue>uUBDqxxh5WApRSiRMFRkKPJAgBY2DuOaP09UeRJ3+DFnyI6eUXsk+O0KLRezH94OClYt2DdfedRMzZILoMXTOQ==</DigestValue>
     </Reference>
-    <Reference URI="lib%2FSensorPermissionGetter.cs">
-      <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>AXhuq2imXHBb73BxknsWrXzmvFDi8g8G5hAlm7tpAEYDoqKVTKFhKlvm0c05iRkg/fA9PY1g1XYGuy5PDpZW7w==</DigestValue>
-    </Reference>
     <Reference URI="lib%2FSensor.cs">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>XFswBXOW7k8HmSafYwvJURFd2d6Pr1SCfDAx3/AqwgPwRp+cKNQb+3vgY0AWeg6R1r1AP0xZBzvnrrgELGCs4g==</DigestValue>
+      <DigestValue>kZf3zUutqWn4dDtgHQjGxz5aY/6cGqRGbXt9yZaiy7Ot9AXlyjYcuVHjWA1an3RblPJLLmMEynejzkqy5VFoXA==</DigestValue>
+    </Reference>
+    <Reference URI="lib%2FNetworkUtil%2FSocketState.cs">
+      <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
+      <DigestValue>mVzfiR6s0c7qH5DbsUykEXDJpeHU/Cufbd2BOi17OyrYDNlybAmKQgnfvb/qFukC2S0BN4xe+nVxQ0EizpkfxA==</DigestValue>
+    </Reference>
+    <Reference URI="lib%2FNetworkUtil%2FNetworking.cs">
+      <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
+      <DigestValue>3acgKVHA2xdCz2/OAlQZQKm3YCwbF+iHHoDljxGyeGQR8FkJPFvwAGV5VXMKNdo9/8XzTaruBcO9zWLTUwHI/A==</DigestValue>
+    </Reference>
+    <Reference URI="lib%2FClient.cs">
+      <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
+      <DigestValue>Cua73SD4Nr3WiTOD0qy/6KDAOemdeZVlLyPvP5TRfSroLsG1y8ZRn+c2bNKzMGTMWZMULZuDRjB3QA50JLsXbQ==</DigestValue>
     </Reference>
     <Reference URI="bin%2FXamarin.Forms.Xaml.dll">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
@@ -44,11 +52,11 @@
     </Reference>
     <Reference URI="bin%2FTizenSensor.pdb">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>y3QOxanR3Sh2jC4R5CLqoYlqnruEGmt05Rmq6BV7Cx6rrg6bnKXIsIpkRRmnm8iFm3uJSATMdORmmz58cEIphg==</DigestValue>
+      <DigestValue>kPqS4UuR65f6xcZYwP8R1OaO2PKhyHd4VIHL422Ad+7EaErUMHuvWdXUKvuqi20UMyuSf0WG/qtG2JuFgMep4Q==</DigestValue>
     </Reference>
     <Reference URI="bin%2FTizenSensor.dll">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>kTWeu9xZ9JLzCJSKbhQr8DQtL79q/RK7NmHQHIoW4RwFSd699ze8LRQZOzQuGKFennE0qSxnxVGy8Q7FXUMpJA==</DigestValue>
+      <DigestValue>PGqGOlm1rDgD0ocreOzUN00q/LnUYPCH51uNUDEfdLPORHQM+dZ/op5qA9KFIbwbe4j7XxPUx50sk1bYoT4JCQ==</DigestValue>
     </Reference>
     <Reference URI="bin%2FTizenHotReload.dll">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
@@ -80,7 +88,7 @@
     </Reference>
     <Reference URI="author-signature.xml">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>LvbID7B0aNjmW5mUKLeBQfX0dLVBvC6SzIloehU+tvOpcrIYDTx83/ABud+lslDvtDMJdeNg0g3hJL8EMzgYAQ==</DigestValue>
+      <DigestValue>t/iESSjSu2vbPJ/Fdi+yOW8sSNQn1VwXrNLfSkt8og707hmq7zC8TEh82tonL4tI1cXRVa6uxWmX9RCYvBQeng==</DigestValue>
     </Reference>
     <Reference URI="#prop">
       <Transforms>
@@ -91,9 +99,9 @@
     </Reference>
   </SignedInfo>
   <SignatureValue>
-YYhp+1zmV5xBdiTZnHk4MY5SR+v7qbfVLTO/tuq2zCXf2xtnt8jbgKH06iBhHXfwphXAGGfKy/QC
-S/3V3RHuKpADAyjs9646D2G5IMGvf//4/rQcqKarhR6R/x4A8VezCEc0Xs6YQkx9haSMKaV0Ip18
-7SZM4bsqrHbrAb+Yq8Y=
+phkMEUpH252GvaueLdThWgPIYxTey+AoulRrRwSrFr9cr71ymIYyNdR5Z+zGjCYcqcCSh4mJT5ac
+UvASxet/FDGcyZlhXsy+ytAQ/Zl5QbicxsKRr3pyrcxDo9Ped8vN82dASm5Lp8xA6BlsABEHY7YX
+BW1KnsmLgA6IkFLbPI4=
 </SignatureValue>
   <KeyInfo>
     <X509Data>
