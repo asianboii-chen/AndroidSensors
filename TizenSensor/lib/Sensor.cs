@@ -45,35 +45,28 @@ namespace TizenSensor.lib
 		protected Sensor(Action<Sensor, SensorData> onUpdated)
 		{
 			OnUpdated = onUpdated;
-
-			heartRateMonitor = new HeartRateMonitor
-			{
-				PausePolicy = SensorPausePolicy.None
-			};
-			accelerometer = new Accelerometer
-			{
-				PausePolicy = SensorPausePolicy.None
-			};
-			gyroscope = new Gyroscope
-			{
-				PausePolicy = SensorPausePolicy.None
-			};
-			stopwatch = new Stopwatch();
 		}
 
 		public Action<Sensor, SensorData> OnUpdated { get; set; }
 
-		public uint ReportInterval { get; protected set; }
-
 		public bool IsRunning { get; protected set; } = false;
 
-		protected HeartRateMonitor heartRateMonitor;
+		protected HeartRateMonitor heartRateMonitor = new HeartRateMonitor
+		{
+			PausePolicy = SensorPausePolicy.None
+		};
 
-		protected Accelerometer accelerometer;
+		protected Accelerometer accelerometer = new Accelerometer
+		{
+			PausePolicy = SensorPausePolicy.None
+		};
 
-		protected Gyroscope gyroscope;
+		protected Gyroscope gyroscope = new Gyroscope
+		{
+			PausePolicy = SensorPausePolicy.None
+		};
 
-		protected Stopwatch stopwatch;
+		protected Stopwatch stopwatch = new Stopwatch();
 
 		public void Start(uint updateInterval)
 		{
@@ -95,7 +88,7 @@ namespace TizenSensor.lib
 				{
 					if (stopwatch.ElapsedMilliseconds - lastReportTime < updateInterval) continue;
 
-					lastReportTime = stopwatch.ElapsedMilliseconds;
+					lastReportTime += updateInterval;
 					Update(lastReportTime);
 				}
 				stopwatch.Stop();

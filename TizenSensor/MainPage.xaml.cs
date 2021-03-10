@@ -19,17 +19,22 @@ namespace TizenSensor
 		{
 			InitializeComponent();
 
+			addrEntry.Completed += OnAddrEntryCompleted;
 			if (Application.Current.Properties.TryGetValue("lastAddr", out object lastAddr))
 				addrEntry.Text = lastAddr as string;
+			gestureRecognizer.Tapped += OnGestureRecognizerTapped;
+			mainLayout.GestureRecognizers.Add(gestureRecognizer);
 
 			Sensor.Create(OnSensorCreated, OnSensorUpdated);
-
-			addrEntry.Completed += OnAddrEntryCompleted;
 		}
+
+		protected TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
 
 		protected Sensor sensor;
 
 		protected Client client;
+
+		protected bool isShowingDetails = false;
 
 		protected void OnSensorCreated(Sensor sensor)
 		{
@@ -122,16 +127,31 @@ namespace TizenSensor
 		protected void OnSensorUpdated(Sensor sensor, SensorData data)
 		{
 			client.Send(data.ToJson() + '\n');
-			Device.BeginInvokeOnMainThread(
-				() => dataLabel.Text = $"Time elapsed:  {(int)data.Seconds / 60:0}:{(int)data.Seconds % 60:00}\n"
-					+ $"Heart rate:  {data.HeartRate} bpm\n"
-					+ $"X acceleration:  {data.AccelerationX:0.00} m/s²\n"
-					+ $"Y acceleration:  {data.AccelerationY:0.00} m/s²\n"
-					+ $"Z acceleration:  {data.AccelerationZ:0.00} m/s²\n"
-					+ $"X angular velocity:  {data.AngularVelocityX:0} °/s\n"
-					+ $"Y angular velocity:  {data.AngularVelocityY:0} °/s\n"
-					+ $"Z angular velocity:  {data.AngularVelocityZ:0} °/s"
-			);
+			Device.BeginInvokeOnMainThread(() =>
+			{
+				if (isShowingDetails)
+				{
+					dataLabel.Text = $"Time elapsed:  {(int)data.Seconds / 60:0}:{(int)data.Seconds % 60:00}\n"
+					   + $"Heart rate:  {data.HeartRate} bpm\n"
+					   + $"X acceleration:  {data.AccelerationX:0.00} m/s²\n"
+					   + $"Y acceleration:  {data.AccelerationY:0.00} m/s²\n"
+					   + $"Z acceleration:  {data.AccelerationZ:0.00} m/s²\n"
+					   + $"X angular velocity:  {data.AngularVelocityX:0} °/s\n"
+					   + $"Y angular velocity:  {data.AngularVelocityY:0} °/s\n"
+					   + $"Z angular velocity:  {data.AngularVelocityZ:0} °/s";
+				}
+				else
+				{
+					dataLabel.Text = "Sensor is running...\n\nTap to show/hide details";
+				}
+			});
+		}
+
+		protected void OnGestureRecognizerTapped(object sender, EventArgs e)
+		{
+			if (!dataLabel.IsVisible) return;
+
+			isShowingDetails = !isShowingDetails;
 		}
 	}
 }
