@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Timers;
+using System.Threading;
 
 using Tizen.Security;
 using Tizen.Sensor;
@@ -13,16 +14,12 @@ namespace TizenSensor.lib
 	{
 		protected const string HealthInfoPermissionString = "http://tizen.org/privilege/healthinfo";
 
-		public static void Create(
-			Action<Sensor> onCreated,
-			Action<int, int, float, float, float> onUpdated,
-			uint reportInterval = 100
-		)
+		public static void Create(Action<Sensor> onCreated, Action<Sensor, SensorData> onUpdated)
 		{
 			var initPermission = PrivacyPrivilegeManager.CheckPermission(HealthInfoPermissionString);
 			if (initPermission == CheckResult.Allow)
 			{
-				onCreated(new Sensor(onUpdated, reportInterval));
+				onCreated(new Sensor(onUpdated));
 				return;
 			}
 			if (initPermission == CheckResult.Deny)
@@ -40,67 +37,95 @@ namespace TizenSensor.lib
 			context.ResponseFetched += (sender, e) =>
 			{
 				if (e.result != RequestResult.AllowForever) onCreated(null);
-				else onCreated(new Sensor(onUpdated, reportInterval));
+				else onCreated(new Sensor(onUpdated));
 			};
 			PrivacyPrivilegeManager.RequestPermission(HealthInfoPermissionString);
 		}
 
-		protected Sensor(Action<int, int, float, float, float> onUpdated, uint reportInterval = 100)
+		protected Sensor(Action<Sensor, SensorData> onUpdated)
 		{
 			OnUpdated = onUpdated;
 
 			heartRateMonitor = new HeartRateMonitor
 			{
-				Interval = reportInterval,
 				PausePolicy = SensorPausePolicy.None
 			};
 			accelerometer = new Accelerometer
 			{
-				Interval = reportInterval,
 				PausePolicy = SensorPausePolicy.None
 			};
-			timer = new Timer
+			gyroscope = new Gyroscope
 			{
-				Interval = reportInterval,
-				AutoReset = true
+				PausePolicy = SensorPausePolicy.None
 			};
-			timer.Elapsed += OnTimerElapsed;
+			stopwatch = new Stopwatch();
 		}
+
+		public Action<Sensor, SensorData> OnUpdated { get; set; }
+
+		public uint ReportInterval { get; protected set; }
+
+		public bool IsRunning { get; protected set; } = false;
 
 		protected HeartRateMonitor heartRateMonitor;
 
 		protected Accelerometer accelerometer;
 
-		protected Timer timer;
+		protected Gyroscope gyroscope;
 
-		protected int timestamp = 0;
+		protected Stopwatch stopwatch;
 
-		public Action<int, int, float, float, float> OnUpdated { get; set; }
-
-		public void Start()
+		public void Start(uint updateInterval)
 		{
+			if (IsRunning) return;
+
+			IsRunning = true;
+			heartRateMonitor.Interval = updateInterval;
+			accelerometer.Interval = updateInterval;
+			gyroscope.Interval = updateInterval;
 			heartRateMonitor.Start();
 			accelerometer.Start();
-			timer.Start();
+			gyroscope.Start();
+
+			new Thread(() =>
+			{
+				stopwatch.Start();
+				long lastReportTime = -updateInterval; // force immediate report
+				while (IsRunning)
+				{
+					if (stopwatch.ElapsedMilliseconds - lastReportTime < updateInterval) continue;
+
+					lastReportTime = stopwatch.ElapsedMilliseconds;
+					Update(lastReportTime);
+				}
+				stopwatch.Stop();
+				stopwatch.Reset();
+			}).Start();
 		}
 
 		public void Stop()
 		{
+			if (!IsRunning) return;
+
+			IsRunning = false;
 			heartRateMonitor.Stop();
 			accelerometer.Stop();
-			timer.Stop();
+			gyroscope.Stop();
 		}
 
-		private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+		protected void Update(long elapsedMilliseconds)
 		{
-			timestamp++;
-			OnUpdated.Invoke(
-				timestamp,
-				heartRateMonitor.HeartRate,
-				accelerometer.X,
-				accelerometer.Y,
-				accelerometer.Z
-			);
+			OnUpdated.Invoke(this, new SensorData
+			{
+				Seconds = elapsedMilliseconds * .001F,
+				HeartRate = heartRateMonitor.HeartRate,
+				AccelerationX = accelerometer.X,
+				AccelerationY = accelerometer.Y,
+				AccelerationZ = accelerometer.Z,
+				AngularVelocityX = gyroscope.X,
+				AngularVelocityY = gyroscope.Y,
+				AngularVelocityZ = gyroscope.Z
+			});
 		}
 	}
 }

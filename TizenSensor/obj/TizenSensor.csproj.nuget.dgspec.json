@@ -45,6 +45,10 @@
         "tizen60": {
           "targetAlias": "tizen60",
           "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
             "Tizen.NET": {
               "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",

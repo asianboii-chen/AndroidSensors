@@ -162,7 +162,7 @@ namespace NetworkUtil
 			IAsyncResult ar;
 			try
 			{
-				ar = socketState.TheSocket.BeginConnect(ipAddress, port, ConnectedCallback, socketState);
+				ar = socketState.Socket.BeginConnect(ipAddress, port, ConnectedCallback, socketState);
 			}
 			catch (Exception ex)
 			{
@@ -197,7 +197,7 @@ namespace NetworkUtil
 
 			try
 			{
-				socketState.TheSocket.EndConnect(ar);
+				socketState.Socket.EndConnect(ar);
 			}
 			catch (Exception ex)
 			{
@@ -236,7 +236,7 @@ namespace NetworkUtil
 		{
 			try
 			{
-				state.TheSocket.BeginReceive(state.buffer, 0, state.buffer.Length, SocketFlags.None, ReceiveCallback, state);
+				state.Socket.BeginReceive(state.buffer, 0, state.buffer.Length, SocketFlags.None, ReceiveCallback, state);
 			}
 			catch (Exception ex)
 			{
@@ -268,7 +268,7 @@ namespace NetworkUtil
 
 			try
 			{
-				numBytes = socketState.TheSocket.EndReceive(ar);
+				numBytes = socketState.Socket.EndReceive(ar);
 			}
 			catch (Exception ex)
 			{
@@ -383,7 +383,7 @@ namespace NetworkUtil
 		/// <param name="message">The error message to report.</param>
 		private static void HandleError(SocketState errorState, string message)
 		{
-			errorState.ErrorOccured = true;
+			errorState.ErrorOccurred = true;
 			errorState.ErrorMessage = message;
 
 			errorState.OnNetworkAction(errorState);

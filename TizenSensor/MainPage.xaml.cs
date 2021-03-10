@@ -19,7 +19,10 @@ namespace TizenSensor
 		{
 			InitializeComponent();
 
-			Sensor.Create(OnSensorCreated, OnSensorUpdated, 1000);
+			if (Application.Current.Properties.TryGetValue("lastAddr", out object lastAddr))
+				addrEntry.Text = lastAddr as string;
+
+			Sensor.Create(OnSensorCreated, OnSensorUpdated);
 
 			addrEntry.Completed += OnAddrEntryCompleted;
 		}
@@ -44,7 +47,7 @@ namespace TizenSensor
 		{
 			addrEntry.IsEnabled = false;
 			messageLabel.Text = "Connecting...";
-			Client.Connect(addrEntry.Text.Trim(), OnClientConnected);
+			Client.Connect(addrEntry.Text.Trim(), OnClientConnected, OnClientReceived, OnClientDisconnected);
 		}
 
 		protected void OnClientConnected(Client client)
@@ -60,16 +63,75 @@ namespace TizenSensor
 			}
 
 			this.client = client;
-			Device.BeginInvokeOnMainThread(() => addrEntry.IsVisible = false);
-			sensor.Start();
+			Device.BeginInvokeOnMainThread(() =>
+			{
+				titleLabel.IsVisible = false;
+				addrEntry.IsVisible = false;
+				messageLabel.IsVisible = false;
+				instructionLabel.IsVisible = true;
+			});
+			// remember entered host address
+			Application.Current.Properties["lastAddr"] = addrEntry.Text.Trim();
+			Application.Current.SavePropertiesAsync();
 		}
 
-		protected void OnSensorUpdated(int timestamp, int heartRate, float accelX, float accelY, float accelZ)
+		protected void OnClientReceived(Client client, string data)
 		{
+			string[] command = data.Trim().Split();
+			switch (command[0])
+			{
+				case "start": // start <update_interval>
+					sensor.Start(uint.Parse(command[1]));
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						instructionLabel.IsVisible = false;
+						dataLabel.IsVisible = true;
+						dataLabel.Text = "";
+					});
+					break;
+				case "stop":
+					sensor.Stop();
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						instructionLabel.IsVisible = true;
+						dataLabel.IsVisible = false;
+					});
+					break;
+				default:
+					Console.WriteLine("Sensor: unknown server command: " + data);
+					break;
+			}
+		}
+
+		protected void OnClientDisconnected(Client client)
+		{
+			this.client = null;
+			sensor.Stop();
+			Device.BeginInvokeOnMainThread(() =>
+			{
+				titleLabel.IsVisible = true;
+				addrEntry.IsVisible = true;
+				addrEntry.IsEnabled = true;
+				messageLabel.IsVisible = true;
+				messageLabel.Text = "Disconnected!";
+				instructionLabel.IsVisible = false;
+				dataLabel.IsVisible = false;
+			});
+		}
+
+		protected void OnSensorUpdated(Sensor sensor, SensorData data)
+		{
+			client.Send(data.ToJson() + '\n');
 			Device.BeginInvokeOnMainThread(
-				() => messageLabel.Text = $"{timestamp}, {heartRate}, {accelX:0.0}, {accelY:0.0}, {accelZ:0.0}"
+				() => dataLabel.Text = $"Time elapsed:  {(int)data.Seconds / 60:0}:{(int)data.Seconds % 60:00}\n"
+					+ $"Heart rate:  {data.HeartRate} bpm\n"
+					+ $"X acceleration:  {data.AccelerationX:0.00} m/s²\n"
+					+ $"Y acceleration:  {data.AccelerationY:0.00} m/s²\n"
+					+ $"Z acceleration:  {data.AccelerationZ:0.00} m/s²\n"
+					+ $"X angular velocity:  {data.AngularVelocityX:0} °/s\n"
+					+ $"Y angular velocity:  {data.AngularVelocityY:0} °/s\n"
+					+ $"Z angular velocity:  {data.AngularVelocityZ:0} °/s"
 			);
-			client.Send($"{timestamp} {heartRate} {accelX} {accelY} {accelZ}\n");
 		}
 	}
 }

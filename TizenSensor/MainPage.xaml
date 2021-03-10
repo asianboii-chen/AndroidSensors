@@ -3,8 +3,10 @@
 	<ContentPage.Content>
 		<StackLayout>
 			<Label x:Name="titleLabel" Text="WearableML" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-			<Entry x:Name="addrEntry" Text="192.168.0." IsEnabled="False" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-			<Label x:Name="messageLabel" Text="" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+			<Entry x:Name="addrEntry" Text="192.168.0." IsTextPredictionEnabled="False" Keyboard="Numeric" IsEnabled="False" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+			<Label x:Name="messageLabel" Text="Enter host address" FontSize="Micro" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+			<Label x:Name="instructionLabel" Text="Sensor ready&#x0a;&#x0a;Press [Start] in the WearableML server" IsVisible="False" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+			<Label x:Name="dataLabel" FontSize="Micro" HorizontalTextAlignment="Center" IsVisible="False" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

@@ -12,13 +12,13 @@ using System.Text;
 /// </summary>
 public class SocketState
 {
-	public readonly Socket TheSocket = null;            // The socket
+	public readonly Socket Socket = null;            // The socket
 	public const int BufferSize = 4096;                 // Size of receive buffer
 	internal byte[] buffer = new byte[BufferSize];      // Receive buffer
 	internal StringBuilder data = new StringBuilder();  // Unprocessed data
 
 	/// <summary>
-	/// A message indicating the nature of an error, if one occured
+	/// A message indicating the nature of an error, if one occurred
 	/// </summary>
 	public string ErrorMessage
 	{
@@ -32,7 +32,7 @@ public class SocketState
 	/// The user of the SocketState should check this flag in their
 	/// OnNetworkAction delegates.
 	/// </summary>
-	public bool ErrorOccured
+	public bool ErrorOccurred
 	{
 		get;
 		internal set;
@@ -62,7 +62,7 @@ public class SocketState
 	public SocketState(Action<SocketState> toCall, Socket s)
 	{
 		OnNetworkAction = toCall;
-		TheSocket = s;
+		Socket = s;
 		ID = nextID++;
 	}
 
