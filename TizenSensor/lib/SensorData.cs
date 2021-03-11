@@ -20,28 +20,28 @@ namespace TizenSensor.lib
 		{
 		}
 
-		[JsonProperty(PropertyName = "s")]
+		[JsonProperty(PropertyName = "seconds")]
 		public float Seconds { get; set; }
 
-		[JsonProperty(PropertyName = "hr")]
+		[JsonProperty(PropertyName = "heartRate")]
 		public int HeartRate { get; set; }
 
-		[JsonProperty(PropertyName = "ax")]
+		[JsonProperty(PropertyName = "accelerationX")]
 		public float AccelerationX { get; set; }
 
-		[JsonProperty(PropertyName = "ay")]
+		[JsonProperty(PropertyName = "accelerationY")]
 		public float AccelerationY { get; set; }
 
-		[JsonProperty(PropertyName = "az")]
+		[JsonProperty(PropertyName = "accelerationZ")]
 		public float AccelerationZ { get; set; }
 
-		[JsonProperty(PropertyName = "vx")]
+		[JsonProperty(PropertyName = "angularVelocityX")]
 		public float AngularVelocityX { get; set; }
 
-		[JsonProperty(PropertyName = "avy")]
+		[JsonProperty(PropertyName = "angularVelocityY")]
 		public float AngularVelocityY { get; set; }
 
-		[JsonProperty(PropertyName = "avz")]
+		[JsonProperty(PropertyName = "angularVelocityZ")]
 		public float AngularVelocityZ { get; set; }
 
 		public string ToJson()
