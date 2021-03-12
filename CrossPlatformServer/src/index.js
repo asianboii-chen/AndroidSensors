@@ -11,6 +11,12 @@ function createWindow() {
   window.removeMenu();
   window.loadFile('src/index.html');
   // window.webContents.openDevTools();
+
+  // let the rendering process handle the close event
+  window.on('close', e => {
+    e.preventDefault();
+    window.webContents.send('close');
+  });
 };
 
 if (require('electron-squirrel-startup')) app.quit();
