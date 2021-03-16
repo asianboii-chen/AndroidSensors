@@ -43,9 +43,10 @@ class Server {
       for (let q in interfaces[p]) {
         let addr = interfaces[p][q];
         if (addr.family == 'IPv4' && !addr['internal'])
-          return Server.hostAddr = addr.address;
+          Server.hostAddr = addr.address;
       }
     }
+    return Server.hostAddr;
   }
 
   static start() {
@@ -230,7 +231,15 @@ class SensorDataRecorder {
    * @param {string} data
    */
   static onServerReceived(data) {
-    SensorDataRecorder.buffer.push(SensorData.fromJSON(data).toCSV() + '\n');
+    let sensorData = null;
+    try {
+      sensorData = SensorData.fromJSON(data);
+    } catch (ex) {
+      console.warn(
+          `Error occurred while parsing sensor data: '${data}'\n${ex}`);
+      return;
+    }
+    SensorDataRecorder.buffer.push(sensorData.toCSV() + '\n');
     if (SensorDataRecorder.buffer.length == SensorDataRecorder.BUFFER_SIZE)
       SensorDataRecorder.save();
   }
@@ -238,7 +247,7 @@ class SensorDataRecorder {
   /** @protected */
   static onServerDisconnected() {
     SensorDataRecorder.onDisconnected?.apply();
-    SensorDataRecorder.save();
+    if (SensorDataRecorder.buffer.length) SensorDataRecorder.save();
   }
 }
 

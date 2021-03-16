@@ -39,9 +39,11 @@ View.init(Server.getAddr());
 
 SensorDataRecorder.onConnected = () => View.gotoConnected();
 SensorDataRecorder.onDisconnected = () => {
+  View.gotoDisconnected();
+  if (!isRunning) return;
+
   isRunning = false;
   AudioRecorder.stop();
-  View.gotoDisconnected();
   Util.showInExplorer(recordDirName);
 };
 SensorDataRecorder.init();
