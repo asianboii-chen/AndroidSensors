@@ -1,5 +1,9 @@
 # Wearable-ML
 
+***This project has moved into the official GitHub organization of the Utah ARM Lab: https://github.com/Utah-ARMLab/Project-WISE***
+
+***
+
 The current software requires both a Samsung watch which runs Tizen OS, and a PC that runs Windows, macOS, or Linux. Currently, the app can record the heartbeat, accelerometer through the smartwatch, and voice through the PC app. We will guide you through the installation steps in the following document. This is still at the early stage of the software development; we have not created the machine learning component. If you have further questions regarding installing the software, please do not hesitate to reach out to us through Professor Alan Kuntz or directly to us: kevin.song@utah.edu, qianlangchen@gmail.com.
 
 ***
