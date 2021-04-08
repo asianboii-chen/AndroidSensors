@@ -34,7 +34,9 @@ The current software requires both a Samsung watch which runs Tizen OS, and a PC
   
   * [Dogfood VSIX](https://marketplace.visualstudio.com/items?itemName=JamieCansdale.DogfoodVsix)
 
-5. Deploy the application onto the watch: follow [the steps under *Run MySteps on Samsung Galaxy Watch*](https://developer.samsung.com/tizen/Galaxy-Watch/get-started/creating-and-running-a-project.html#Deploying-and-running-your-application)
+5. Clone or download this repository and open `TizenSensor/TizenSensor.sln` with Visual Studio.
+
+6. Deploy the application onto the watch: follow [the steps under *Run MySteps on Samsung Galaxy Watch*](https://developer.samsung.com/tizen/Galaxy-Watch/get-started/creating-and-running-a-project.html#Deploying-and-running-your-application)
 
 ***
 
